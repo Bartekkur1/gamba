@@ -33,8 +33,8 @@ export class StartBetHandler extends HandlerBase {
 
         try {
             this.services.betManager.startBet(bet);
-            const bossDrop = drop[raid][boss][difficulty].reduce((prev, curr) => {
-                prev += `> ${curr} \n`
+            const bossDrop = drop[raid][boss][difficulty].reduce((prev, curr, index) => {
+                prev += `> ${index + 1}: ${curr} \n`
                 return prev;
             }, "");
 

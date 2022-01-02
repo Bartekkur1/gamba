@@ -15,7 +15,7 @@ export class BetManager {
         return this.pool;
     }
 
-    private getLastBet(): Bet {
+    getLastBet(): Bet {
         if (this.bets.length > 0) {
             return this.bets[this.bets.length - 1];
         } else {

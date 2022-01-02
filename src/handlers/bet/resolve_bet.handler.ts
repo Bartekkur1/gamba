@@ -2,8 +2,9 @@ import { Message } from "discord.js";
 import { HandlerBase } from "../../types/handler";
 import { config } from "../../util/config";
 import logger from "../../util/logger";
+import drop from '../../../drop.json';
 
-const regExp = /^!resolve_bet\n([a-zA-Z\s]+)/;
+const regExp = /^!resolve_bet\s([0-9,]+)$/;
 
 export class ResolveBetHandler extends HandlerBase {
     match(command: string) {
@@ -16,11 +17,13 @@ export class ResolveBetHandler extends HandlerBase {
             return;
         }
 
-        const items = message.content.split(/\n/);
-        items.shift();
+        const [_, itemIds] = message.content.match(regExp);
 
         try {
             const bet = this.services.betManager.resolveBet();
+            const itemsList = drop[bet.raid][bet.boss][bet.difficulty]
+            const items = itemIds.split(',').map(id => itemsList[parseInt(id) - 1]);
+
             const totalPool = this.services.betManager.getPool();
             const winningBets = bet.bets.filter(bet => items.includes(bet.item));
             const winningPool = winningBets.flatMap(b => b.coins).reduce((prev, curr) => prev += curr, 0);
@@ -43,7 +46,7 @@ export class ResolveBetHandler extends HandlerBase {
 
             await sendMessage(`
 Bet ${bet.id} is resolved!
-Coins to win: ${totalPool}
+Total coins in pool: ${totalPool}
 ${printWinners.length > 0 ? 'Winners: ' : 'There was no winners this time!'}
 ${printWinners}
                     `);
