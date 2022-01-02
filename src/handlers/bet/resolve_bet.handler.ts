@@ -39,7 +39,7 @@ export class ResolveBetHandler extends HandlerBase {
                 return prev;
             }, {});
 
-            const printWinners = Object.keys(winnersTake).map(userId => `<@${userId}> placed ${winnersSummed[userId]} and won ${winnersTake[userId]}! \n`);
+            const printWinners = Object.keys(winnersTake).map(userId => `<@${userId}> won ${winnersTake[userId]}! \n`);
 
             await sendMessage(`
 Bet ${bet.id} is resolved!
@@ -48,7 +48,7 @@ ${printWinners.length > 0 ? 'Winners: ' : 'There was no winners this time!'}
 ${printWinners}
                     `);
 
-            const userIds = Object.keys(printWinners);
+            const userIds = Object.keys(winnersTake);
             for (let userId of userIds) {
                 const coins = winnersTake[userId];
                 logger.debug(`transfering ${coins} to ${userId}`);

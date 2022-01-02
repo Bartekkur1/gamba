@@ -6,6 +6,7 @@ export interface UserBet {
 
 export enum BetStatus {
     PENDING = "PENDING",
+    STOPPED = "STOPPED",
     CLOSED = "CLOSED",
     RESOLVED = "RESOLVED"
 };

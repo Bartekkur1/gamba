@@ -36,6 +36,12 @@ export class BetManager {
         this.bets.push(bet);
     }
 
+    stopBet() {
+        const lastBet = this.getLastBet();
+        lastBet.status = BetStatus.STOPPED;
+        return lastBet;
+    }
+
     cancelBet() {
         if (this.bets.length > 0) {
             const lastBet = this.getLastBet();
@@ -70,7 +76,7 @@ export class BetManager {
             lastBet.bets.push(userBet);
             this.pool += userBet.coins;
         } else {
-            throw new Error("Can't bet on closed/resolved bets!");
+            throw new Error(`Can't bet on ${lastBet.status} bets!`);
         }
     }
 }

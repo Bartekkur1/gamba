@@ -8,10 +8,10 @@
 
 ## Bet Master
 
-- [ ] !start_bet <raid> <boss>
-- [ ] !stop_bet
-- [ ] !cancel_bet
-- [ ] !resolve_bet <item ids>
+- [x] !start_bet <raid> <boss>
+- [x] !stop_bet
+- [x] !cancel_bet
+- [x] !resolve_bet <item ids>
 
 ## Coins
 
@@ -25,8 +25,8 @@
 - [x] !remove_coints <amount> <user>
 
 # Bet
-- [ ] !bet_info
-- [ ] !bet <amount> <item>
+- [] !bet_info
+- [x] !bet <amount> <item>
 - [ ] !cancel_bet <id>
 - [ ] !bets
 
