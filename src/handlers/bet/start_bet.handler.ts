@@ -41,7 +41,6 @@ export class StartBetHandler extends HandlerBase {
             await sendMessage(`
 Bet ${raid} ${difficulty} on ${boss} started!
 ID: ${bet.id}
-Start Date: ${new Date(bet.start).toISOString().replace('T', ' ').split('.')[0]}
 Boss Drop:
 ${bossDrop}
 Place your bets!
