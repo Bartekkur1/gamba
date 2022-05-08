@@ -13,7 +13,12 @@ export interface DatabaseConfig {
     password: string;
 }
 
+export interface WebConfig {
+    port: string;
+}
+
 export interface Config {
     discord: DiscordConfig;
     database: DatabaseConfig;
+    web: WebConfig;
 };

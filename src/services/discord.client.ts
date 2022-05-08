@@ -25,7 +25,7 @@ export class DiscordClient {
                 .then(channel => {
                     const textChannel = channel as TextChannel;
                     this.channel = textChannel;
-                    this.channel.send('Im alive!');
+                    logger.debug('Discord Client is ready!');
                 });
         });
 

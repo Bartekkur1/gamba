@@ -1,27 +1,24 @@
 import { Message } from "discord.js";
 import { HandlerBase } from "../../types/handler";
-import { config } from "../../util/config";
+import logger from "../../util/logger";
 
 export class CancelBetHandler extends HandlerBase {
     match(command: string) {
-        return /^!cancel_bet$/.test(command);
+        return /^!cancel\sbet$/.test(command);
     }
 
     async handle(message: Message, sendMessage: (message: string) => Promise<void>) {
-        if (message.author.id !== config.discord.admin) {
-            await sendMessage('Only Gamba Admin can manage bets');
-            return;
-        }
-
         try {
-            const { id, bets } = this.services.betManager.cancelBet();
-            for (let bet of bets) {
-                const { userId, coins } = bet;
-                await this.services.user.increaseUserCoins(userId, coins);
+            const userId = message.author.id;
+            const userBets = this.services.betManager.cancelUserBets(userId);
+
+            for (let bet of userBets) {
+                await this.services.user.increaseUserCoins(userId, bet.coins);
             }
+
+            logger.debug(`User ${userId} canceled own bets`);
             await sendMessage(`
-Bet ${id} was canceled!
-Coins will be redistributed back to owners 💪
+<@${userId}> your bets are canceled!
             `);
         } catch (err) {
             await sendMessage(err.message);

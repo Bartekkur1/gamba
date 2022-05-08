@@ -4,7 +4,7 @@ import drop from '../../../drop.json';
 
 export class RaidListHandler extends HandlerBase {
     match(command: string) {
-        return /^!raid\_list$/.test(command);
+        return /^!dungeons$/.test(command);
     }
 
     async handle(message: Message, sendMessage: (message: string) => Promise<void>) {

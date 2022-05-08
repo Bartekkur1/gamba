@@ -7,8 +7,12 @@ export class CoinsHandler extends HandlerBase {
     }
 
     async handle(message: Message, sendMessage: (message: string) => Promise<void>) {
-        const userCoins = await this.services.user.getUserCoins(message.author.id);
-        await sendMessage(`<@${message.author.id}> you have ${userCoins} coins`);
-        return;
+        try {
+            const userCoins = await this.services.user.getUserCoins(message.author.id);
+            await sendMessage(`<@${message.author.id}> you have ${userCoins} coins`);
+            return;
+        } catch (err) {
+            await sendMessage(err.message);
+        }
     }
 }

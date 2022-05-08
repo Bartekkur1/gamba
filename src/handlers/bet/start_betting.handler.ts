@@ -4,10 +4,11 @@ import { v4 } from 'uuid';
 import { Bet, BetStatus } from "../../types/bet";
 import drop from '../../../drop.json';
 import { config } from "../../util/config";
+import logger from "../../util/logger";
 
-const regExp = /^!start_bet\s([a-zA-Z]+)\s(\d+)\s([a-zA-Z\s']+)$/;
+const regExp = /^!start\sbetting\s([a-zA-Z]+)\s(\d+)\s([a-zA-Z\s']+)$/;
 
-export class StartBetHandler extends HandlerBase {
+export class StartBettingHandler extends HandlerBase {
     match(command: string) {
         return regExp.test(command);
     }
@@ -38,12 +39,12 @@ export class StartBetHandler extends HandlerBase {
                 return prev;
             }, "");
 
+            logger.debug(`Betting started on ${bet.id}`);
             await sendMessage(`
-Bet ${raid} ${difficulty} on ${boss} started!
-ID: ${bet.id}
+Betting on *${raid} ${boss} ${difficulty}* started!
 Boss Drop:
 ${bossDrop}
-Place your bets!
+Place your bet by using command !bet <coins> <item number>
             `);
         } catch (err) {
             await message.react('😔');

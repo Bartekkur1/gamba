@@ -7,6 +7,8 @@ export class PingHandler extends HandlerBase {
     }
 
     async handle(message: Message, sendMessage: (message: string) => Promise<void>) {
+        console.log(message.author.username);
+
         await sendMessage('pong');
         return;
     }

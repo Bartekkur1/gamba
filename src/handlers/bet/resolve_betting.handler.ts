@@ -4,9 +4,9 @@ import { config } from "../../util/config";
 import logger from "../../util/logger";
 import drop from '../../../drop.json';
 
-const regExp = /^!resolve_bet\s([0-9,]+)$/;
+const regExp = /^!resolve\sbetting\s([0-9,]+)$/;
 
-export class ResolveBetHandler extends HandlerBase {
+export class ResolveBettingHandler extends HandlerBase {
     match(command: string) {
         return regExp.test(command);
     }
@@ -44,9 +44,10 @@ export class ResolveBetHandler extends HandlerBase {
 
             const printWinners = Object.keys(winnersTake).map(userId => `<@${userId}> won ${winnersTake[userId]}! \n`);
 
+            logger.debug(`Bet ${bet.id} resolved`);
             await sendMessage(`
-Bet ${bet.id} is resolved!
-Total coins in pool: ${totalPool}
+Bet on *${bet.raid} ${bet.boss} ${bet.difficulty}* resolved!
+Total coins in pool to win: ${totalPool}
 ${printWinners.length > 0 ? 'Winners: ' : 'There was no winners this time!'}
 ${printWinners}
                     `);
@@ -54,8 +55,11 @@ ${printWinners}
             const userIds = Object.keys(winnersTake);
             for (let userId of userIds) {
                 const coins = winnersTake[userId];
-                logger.debug(`transfering ${coins} to ${userId}`);
                 await this.services.user.increaseUserCoins(userId, coins);
+            }
+
+            if (userIds.length > 0) {
+                this.services.betManager.resetPool();
             }
 
         } catch (err) {

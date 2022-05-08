@@ -1,8 +1,10 @@
 import { DatabaseClient } from "./src/services/db.client";
 
 const userTable = `
+DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
-    userId varchar(20) NOT NULL,
+    userId varchar(36) NOT NULL,
+    userName varchar(64) NOT NULL,
     coins integer NOT NULL DEFAULT '0',
     PRIMARY KEY (userId)
   )
@@ -11,9 +13,10 @@ CREATE TABLE IF NOT EXISTS users (
 
 (async () => {
   const dbClient = new DatabaseClient();
-  await dbClient.connect();
+  const connection = await dbClient.getConnection();
 
-  await dbClient.execute(userTable);
+  await connection.query(userTable);
 
+  await connection.release();
   await dbClient.disconnect();
 })();

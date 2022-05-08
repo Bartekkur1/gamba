@@ -2,7 +2,7 @@ import { Message, TextChannel } from "discord.js";
 import { HandlerBase } from "../../types/handler";
 import { config } from "../../util/config";
 
-const regExp = /^!remove_coins\s\<\@\!(\d+)\>\s(\d+)/;
+const regExp = /^!remove\scoins\s\<\@\!(\d+)\>\s(\d+)/;
 
 export class RemoveCoinsHandler extends HandlerBase {
     match(command: string) {

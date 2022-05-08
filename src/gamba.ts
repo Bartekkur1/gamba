@@ -1,13 +1,12 @@
 import { DiscordClient } from "./services/discord.client";
 import { DatabaseClient } from "./services/db.client";
-import { Message } from "discord.js";
-import { config } from "./util/config";
 import logger from "./util/logger";
 import { createHandlers } from "./handlers/handlers";
 import { Services } from "./types/services";
 import { UserDao } from "./dao/user.dao";
 import { HandlerBase } from "./types/handler";
 import { BetManager } from "./services/bet.manager";
+import { WebServer } from "./webServer";
 
 export class Gamba {
 
@@ -15,6 +14,7 @@ export class Gamba {
     private dbClient: DatabaseClient;
     private services: Services;
     private handlers: HandlerBase[];
+    private webServer: WebServer;
 
     constructor() {
         this.dbClient = new DatabaseClient();
@@ -23,6 +23,7 @@ export class Gamba {
             user: new UserDao(this.dbClient),
             betManager: new BetManager()
         }
+        this.webServer = new WebServer(this.services);
     }
 
     async init() {
@@ -31,5 +32,6 @@ export class Gamba {
             logger.debug(`Handler registered: ${handler.constructor.name}`);
         }
         await this.dcClient.start(this.handlers);
+        await this.webServer.start();
     }
 }

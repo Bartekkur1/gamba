@@ -11,8 +11,12 @@ export class BetManager {
         this.pool = 0;
     }
 
-    public getPool() {
+    getPool() {
         return this.pool;
+    }
+
+    resetPool() {
+        this.pool = 0;
     }
 
     getLastBet(): Bet {
@@ -38,6 +42,11 @@ export class BetManager {
 
     stopBet() {
         const lastBet = this.getLastBet();
+
+        if (lastBet.status != BetStatus.PENDING) {
+            throw new Error('Bet is already stoped!');
+        }
+
         lastBet.status = BetStatus.STOPPED;
         return lastBet;
     }
@@ -53,7 +62,35 @@ export class BetManager {
         const lastBet = this.getLastBet();
         lastBet.status = BetStatus.CLOSED;
         lastBet.end = new Date().getTime();
+        for (let bet of lastBet.bets) {
+            this.pool -= bet.coins;
+        }
         return lastBet;
+    }
+
+    getUserBets(userId: string) {
+        const lastBet = this.getLastBet();
+        if (lastBet.status !== BetStatus.PENDING) {
+            throw new Error('There is no pending bet!');
+        }
+
+        return lastBet.bets.filter(b => b.userId === userId);
+    }
+
+    cancelUserBets(userId: string) {
+        const lastBet = this.getLastBet();
+        const userBets = this.getUserBets(userId);
+        if (userBets.length === 0) {
+            throw new Error(`<@${userId}> dont have any ongoing bets!`);
+        }
+
+        lastBet.bets = lastBet.bets.filter(b => b.userId !== userId);
+
+        for (let bet of userBets) {
+            this.pool -= bet.coins;
+        }
+
+        return userBets;
     }
 
     resolveBet() {
@@ -69,7 +106,7 @@ export class BetManager {
         if (lastBet.status === BetStatus.PENDING) {
 
             const bossItems = drop[lastBet.raid][lastBet.boss][lastBet.difficulty];
-            if (!bossItems.includes(userBet.item)) {
+            if (!userBet.item || !bossItems.includes(userBet.item)) {
                 throw new Error("Boss doesn't drop that item!");
             }
 

@@ -3,7 +3,7 @@ import { HandlerBase } from "../../types/handler";
 
 export class BetPoolHandler extends HandlerBase {
     match(command: string) {
-        return /^!bet_pool$/.test(command);
+        return /^!pool$/.test(command);
     }
 
     async handle(message: Message, sendMessage: (message: string) => Promise<void>) {

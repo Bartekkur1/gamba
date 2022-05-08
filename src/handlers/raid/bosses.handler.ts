@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 import { HandlerBase } from "../../types/handler";
 import drop from '../../../drop.json';
 
-const regExp = /^!raid\_boss\s([a-zA-Z]+)$/;
+const regExp = /^!dungeon\sbosses\s([a-zA-Z]+)$/;
 
 export class BossListHandler extends HandlerBase {
     match(command: string) {

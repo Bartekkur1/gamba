@@ -9,9 +9,13 @@ export class UserCoinsHandler extends HandlerBase {
     }
 
     async handle(message: Message, sendMessage: (message: string) => Promise<void>) {
-        const [_, user] = message.content.match(regExp);
-        const userCoins = await this.services.user.getUserCoins(user);
-        await sendMessage(`<@${user}> have ${userCoins} coins`);
+        try {
+            const [_, user] = message.content.match(regExp);
+            const userCoins = await this.services.user.getUserCoins(user);
+            await sendMessage(`<@${user}> have ${userCoins} coins`);
+        } catch (err) {
+            await sendMessage(err.message);
+        }
         return;
     }
 }

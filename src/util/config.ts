@@ -16,5 +16,8 @@ export const config: Config = {
         password: process.env.POSTGRESQL_PASSWORD,
         port: parseInt(process.env.POSTGRESQL_PORT),
         user: process.env.POSTGRESQL_USER
+    },
+    web: {
+        port: process.env.PORT
     }
 };
